@@ -135,6 +135,8 @@ services:
     image: dosirak/eureka-server:latest
     container_name: eureka-server
     profiles: [platform]
+    environment:
+      EUREKA_HOSTNAME: eureka-server
     ports:
       - "8761:8761"
     depends_on:
