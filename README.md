@@ -39,6 +39,110 @@ infra/
 
 ---
 
+## 빠른 시작 (make 명령어)
+
+> **사전 요구사항:** `make` 명령어 사용을 위해 Xcode Command Line Tools가 설치되어 있어야 합니다.
+> ```bash
+> xcode-select --install
+> ```
+
+### 처음 코드 실행할때
+
+```bash
+make setup
+```
+
+> ⚠️ **실행 전에 `.env` 파일을 먼저 직접 생성해야 합니다.**
+> `.env.example`을 참고해 비밀번호 등 실제 값을 채운 후 저장하세요.
+> `.env` 파일이 없으면 `make setup`이 실행을 중단합니다.
+> ```bash
+> cp .env.example .env
+> # .env 파일 열어서 비밀번호 직접 수정
+> ```
+
+**내부적으로 일어나는 일:**
+1. `.env` 파일 존재 여부 확인 (없으면 중단)
+2. `../Config_server`에서 Gradle 빌드 후 `dosirak/config-server:latest` Docker 이미지 생성
+3. `../Eureka_Server`에서 Gradle 빌드 후 `dosirak/eureka-server:latest` Docker 이미지 생성
+4. `infra` 프로파일 컨테이너 기동: **PostgreSQL, Redis, Zookeeper, Kafka, Kafdrop, Keycloak**
+
+---
+
+### 매일 개발 시작할 때
+
+**DB/Kafka만 필요한 경우** (본인 서비스를 IntelliJ에서 직접 실행할 때)
+
+```bash
+make dev
+```
+
+**내부적으로 일어나는 일:**
+- `infra` 프로파일 컨테이너 기동: **PostgreSQL, Redis, Zookeeper, Kafka, Kafdrop, Keycloak**
+- Config Server, Eureka는 실행되지 않음 → IntelliJ에서 직접 실행하거나 `make dev-platform` 사용
+
+---
+
+**Config Server + Eureka까지 Docker로 띄울 때** (플랫폼 서비스가 필요한 경우)
+
+```bash
+make dev-platform
+```
+
+**내부적으로 일어나는 일:**
+1. `infra` 프로파일 컨테이너 기동: **PostgreSQL, Redis, Zookeeper, Kafka, Kafdrop, Keycloak**
+2. `config-server` 컨테이너 기동: **Config Server** (포트 8888, Keycloak/PostgreSQL healthy 확인 후 시작)
+3. `eureka-server` 컨테이너 기동: **Eureka Server** (포트 8761, Config Server healthy 확인 후 시작)
+- 기동 순서가 보장됨 (의존성 헬스체크 기반)
+- API Gateway는 Milestone 4 완료 후 추가 예정
+
+---
+
+### platform 서비스 코드 변경 후 이미지 재빌드
+
+```bash
+make build-platform
+```
+
+**내부적으로 일어나는 일:**
+- `../Config_server`, `../Eureka_Server` 각각 Gradle 빌드 후 Docker 이미지 재생성
+- 컨테이너는 재시작되지 않음 → 재빌드 후 `make dev-platform` 다시 실행 필요
+
+---
+
+### 개발 종료
+
+```bash
+make down
+```
+
+**내부적으로 일어나는 일:**
+- `infra` + `platform` 프로파일 컨테이너 전체 종료 및 삭제
+- PostgreSQL 데이터는 볼륨에 유지됨 (다음 실행 시 데이터 그대로)
+
+---
+
+### 전체 상태 확인
+
+```bash
+make ps     # 실행 중인 컨테이너 목록 + healthy 상태 확인
+make logs   # 실시간 로그 스트림 (Ctrl+C로 종료)
+```
+
+---
+
+### 명령어 요약
+
+| 명령어 | 기동되는 컨테이너 | 사용 시점 |
+|--------|----------------|---------|
+| `make setup` | PostgreSQL, Redis, Kafka, Zookeeper, Kafdrop, Keycloak | 최초 1회 |
+| `make dev` | PostgreSQL, Redis, Kafka, Zookeeper, Kafdrop, Keycloak | 매일 시작 (IntelliJ로 서비스 직접 실행) |
+| `make dev-platform` | 위 + Config Server, Eureka Server | 플랫폼 포함 전체 Docker로 실행 |
+| `make build-platform` | (컨테이너 없음, 이미지만 빌드) | config/eureka 코드 변경 후 |
+| `make down` | 전체 종료 | 개발 종료 시 |
+| `make ps` | 상태 확인 | 언제든지 |
+
+---
+
 ## 최초 세팅 (처음 한 번만)
 
 ### 1. 저장소 클론
@@ -107,7 +211,7 @@ docker compose --profile infra --profile platform --profile app --profile monito
 ### 컨테이너 상태 확인
 
 ```bash
-docker compose --profile infra ps
+make ps
 ```
 
 모든 컨테이너의 STATUS가 `healthy` 또는 `running`인지 확인합니다.
