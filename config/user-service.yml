@@ -1,0 +1,16 @@
+server:
+  port: 19081
+
+spring:
+  application:
+    name: user-service
+  datasource:
+    url: jdbc:postgresql://postgres:5432/user_db
+    username: user_svc_user
+    password: ${USER_DB_PASSWORD:1234}
+    driver-class-name: org.postgresql.Driver
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: user-group
+      auto-offset-reset: earliest
