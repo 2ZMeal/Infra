@@ -114,6 +114,7 @@ services:
     image: dosirak/config-server:latest
     container_name: config-server
     profiles: [platform]
+    env_file: .env
     ports:
       - "8888:8888"
     volumes:
