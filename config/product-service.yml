@@ -1,0 +1,16 @@
+server:
+  port: 19083
+
+spring:
+  application:
+    name: product-service
+  datasource:
+    url: jdbc:postgresql://postgres:5432/product_db
+    username: product_user
+    password: "1234"
+    driver-class-name: org.postgresql.Driver
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: product-group
+      auto-offset-reset: earliest

@@ -1,0 +1,16 @@
+server:
+  port: 19086
+
+spring:
+  application:
+    name: payment-service
+  datasource:
+    url: jdbc:postgresql://postgres:5432/payment_db
+    username: payment_user
+    password: "1234"
+    driver-class-name: org.postgresql.Driver
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: payment-group
+      auto-offset-reset: earliest
