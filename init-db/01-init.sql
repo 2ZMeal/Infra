@@ -33,3 +33,34 @@ GRANT ALL PRIVILEGES ON DATABASE shipment_db TO shipment_user;
 GRANT ALL PRIVILEGES ON DATABASE notification_db TO notification_user;
 GRANT ALL PRIVILEGES ON DATABASE review_db TO review_user;
 GRANT ALL PRIVILEGES ON DATABASE customer_db TO customer_user;
+
+-- public 스키마 권한 부여 (PostgreSQL 15+에서 기본 제거됨)
+\connect user_db
+GRANT ALL ON SCHEMA public TO user_svc_user;
+
+\connect company_db
+GRANT ALL ON SCHEMA public TO company_user;
+
+\connect product_db
+GRANT ALL ON SCHEMA public TO product_user;
+
+\connect cart_db
+GRANT ALL ON SCHEMA public TO cart_user;
+
+\connect order_db
+GRANT ALL ON SCHEMA public TO order_user;
+
+\connect payment_db
+GRANT ALL ON SCHEMA public TO payment_user;
+
+\connect shipment_db
+GRANT ALL ON SCHEMA public TO shipment_user;
+
+\connect notification_db
+GRANT ALL ON SCHEMA public TO notification_user;
+
+\connect review_db
+GRANT ALL ON SCHEMA public TO review_user;
+
+\connect customer_db
+GRANT ALL ON SCHEMA public TO customer_user;
