@@ -4,6 +4,53 @@
 
 ---
 
+## 전체 프로젝트 구조
+
+이 프로젝트는 **여러 개의 독립 레포지토리**가 하나의 부모 디렉토리 아래에 나란히 위치해야 합니다.
+`docker-compose.dev.yml`이 `../서비스명` 경로로 각 레포를 빌드하기 때문입니다.
+
+```
+Sparta_Project3/          ← 부모 디렉토리 (이름은 자유)
+│
+├── Infra/                ← 이 레포 (docker-compose, 환경 설정)
+│
+├── Config_server/        ← Spring Cloud Config Server      [platform]
+├── Eureka_Server/        ← Spring Cloud Eureka Server      [platform]
+└── Gateway_server/       ← Spring Cloud API Gateway        [platform]
+```
+
+> `[platform]` — Config/Eureka/Gateway: docker compose 빌드 대상 (소스에서 직접 빌드)
+
+---
+
+## 최초 세팅 순서
+
+### Step 1. 레포지토리 클론
+
+부모 디렉토리를 만들고 필요한 레포를 모두 클론합니다.
+
+```bash
+mkdir Sparta_Project3 && cd Sparta_Project3
+
+# 1) 인프라 (필수)
+git clone {Infra 레포 URL} Infra
+
+# 2) Platform 서버 (필수 — docker compose 빌드 대상)
+git clone {Config_server 레포 URL} Config_server
+git clone {Eureka_Server 레포 URL} Eureka_Server
+git clone {Gateway_server 레포 URL} Gateway_server
+```
+
+### Step 2. Infra 디렉토리로 이동
+
+이후 모든 docker compose 명령어는 `Infra/` 디렉토리 안에서 실행합니다.
+
+```bash
+cd Infra
+```
+
+---
+
 ## 사전 요구사항
 
 **macOS / Windows / Linux 공통**
