@@ -33,12 +33,12 @@ Sparta_Project3/          ← 부모 디렉토리 (이름은 자유)
 mkdir Sparta_Project3 && cd Sparta_Project3
 
 # 1) 인프라 (필수)
-git clone {Infra 레포 URL} Infra
+git clone https://github.com/2ZMeal/Infra.git Infra
 
 # 2) Platform 서버 (필수 — docker compose 빌드 대상)
-git clone {Config_server 레포 URL} Config_server
-git clone {Eureka_Server 레포 URL} Eureka_Server
-git clone {Gateway_server 레포 URL} Gateway_server
+git clone https://github.com/2ZMeal/Config_server.git Config_server
+git clone https://github.com/2ZMeal/Eureka_Server.git Eureka_Server
+git clone https://github.com/2ZMeal/Gateway_server.git Gateway_server
 ```
 
 ### Step 2. Infra 디렉토리로 이동
@@ -92,7 +92,7 @@ infra(DB/Kafka) + Config Server + Eureka Server + API Gateway를 모두 기동�
 
 위 명령어로 infra + platform 기동 후 본인 서비스를 IntelliJ에서 실행합니다.
 
-### Environment Variables 설정
+### Environment Variables 설정 - 각 서비스 도메인에서 실행
 
 `Edit Configurations... → Environment variables` 에 아래 값을 입력합니다.
 
