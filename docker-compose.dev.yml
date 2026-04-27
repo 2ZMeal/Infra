@@ -1,6 +1,27 @@
+# 로컬 개발 전용 Compose 파일
+#
+# 사용법:
+#   infra만 실행 (IntelliJ로 서비스 개발):
+#     docker compose -f docker-compose.dev.yml --profile infra up -d
+#
+#   infra + platform 빌드 & 실행 (최초 세팅 및 코드 변경 후):
+#     docker compose -f docker-compose.dev.yml --profile infra --profile platform up -d --build
+#
+#   platform 이미지 강제 재빌드:
+#     docker compose -f docker-compose.dev.yml --profile platform build --no-cache
+#
+#   전체 종료:
+#     docker compose -f docker-compose.dev.yml --profile infra --profile platform down
+#
+# 프로필:
+#   infra      -- PostgreSQL, Redis, Kafka, Keycloak (항상 필요)
+#   platform   -- Config Server, Eureka, API Gateway (소스에서 직접 빌드)
+#   app        -- 10개 도메인 서비스 (해당 레포 클론 후 사용 가능)
+#   monitoring -- Prometheus, Grafana, Zipkin
+
 services:
 
-  # ── PostgreSQL ──────────────────────────────────────
+  # -- PostgreSQL --------------------------------------------------
   postgres:
     image: postgres:16
     container_name: postgres
@@ -20,7 +41,7 @@ services:
       timeout: 5s
       retries: 5
 
-  # ── Redis ───────────────────────────────────────────
+  # -- Redis -------------------------------------------------------
   redis:
     image: redis:7
     container_name: redis
@@ -33,7 +54,7 @@ services:
       timeout: 5s
       retries: 5
 
-  # ── Zookeeper ───────────────────────────────────────
+  # -- Zookeeper ---------------------------------------------------
   zookeeper:
     image: confluentinc/cp-zookeeper:7.6.1
     container_name: zookeeper
@@ -49,7 +70,7 @@ services:
       timeout: 5s
       retries: 5
 
-  # ── Kafka ────────────────────────────────────────────
+  # -- Kafka -------------------------------------------------------
   kafka:
     image: confluentinc/cp-kafka:7.6.1
     container_name: kafka
@@ -59,10 +80,14 @@ services:
         condition: service_healthy
     ports:
       - "9092:9092"
+      - "29092:29092"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:29092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
     healthcheck:
@@ -71,35 +96,41 @@ services:
       timeout: 10s
       retries: 5
 
-  # ── Kafdrop (Kafka UI) ───────────────────────────────
-  kafdrop:
-    image: obsidiandynamics/kafdrop:latest
-    container_name: kafdrop
+  # -- Kafka UI ----------------------------------------------------
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
     profiles: [infra]
     depends_on:
       kafka:
         condition: service_healthy
     ports:
-      - "9000:9000"
+      - "9001:8080"
     environment:
-      KAFKA_BROKERCONNECT: kafka:9092
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
 
-  # ── Keycloak ─────────────────────────────────────────
+  # -- Keycloak ----------------------------------------------------
   keycloak:
     image: quay.io/keycloak/keycloak:24.0.3
     container_name: keycloak
     profiles: [infra]
-    command: start-dev
+#    command: start-dev
+    command:
+      - start-dev
+      - --import-realm
     env_file: .env
     environment:
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://postgres:5432/postgres
-      KC_DB_USERNAME: ${POSTGRES_USER}
-      KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak_db
+      KC_DB_USERNAME: ${KEYCLOAK_DB_USER}
+      KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
     ports:
       - "8180:8080"
+    volumes:
+      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
     depends_on:
       postgres:
         condition: service_healthy
@@ -109,9 +140,12 @@ services:
       timeout: 10s
       retries: 10
 
-  # ── Config Server ────────────────────────────────────
+  # -- Config Server (소스에서 빌드) --------------------------------
   config-server:
-    image: dosirak/config-server:latest
+    build:
+      context: ../Config_server
+      dockerfile: Dockerfile
+    image: dosirak/config-server:dev
     container_name: config-server
     profiles: [platform]
     env_file: .env
@@ -130,9 +164,12 @@ services:
       timeout: 10s
       retries: 5
 
-  # ── Eureka Server ─────────────────────────────────────
+  # -- Eureka Server (소스에서 빌드) --------------------------------
   eureka-server:
-    image: dosirak/eureka-server:latest
+    build:
+      context: ../Eureka_Server
+      dockerfile: Dockerfile
+    image: dosirak/eureka-server:dev
     container_name: eureka-server
     profiles: [platform]
     environment:
@@ -148,9 +185,12 @@ services:
       timeout: 10s
       retries: 5
 
-  # ── API Gateway ───────────────────────────────────────
+  # -- API Gateway (소스에서 빌드) ----------------------------------
   api-gateway:
-    image: dosirak/api-gateway:latest
+    build:
+      context: ../Gateway_server
+      dockerfile: Dockerfile
+    image: dosirak/api-gateway:dev
     container_name: api-gateway
     profiles: [platform]
     ports:
@@ -164,11 +204,16 @@ services:
       timeout: 10s
       retries: 5
 
-  # ── Domain Services (app profile) ────────────────────
+  # -- Domain Services (app profile) --------------------------------
+  # 해당 서비스 레포를 ../서비스명 경로에 클론한 뒤 --profile app으로 실행
   user-service:
-    image: dosirak/user-service:latest
+    build:
+      context: ../user-service
+      dockerfile: Dockerfile
+    image: dosirak/user-service:dev
     container_name: user-service
     profiles: [app]
+    env_file: .env
     ports:
       - "19081:19081"
     depends_on:
@@ -178,9 +223,13 @@ services:
         condition: service_healthy
 
   company-service:
-    image: dosirak/company-service:latest
+    build:
+      context: ../company-service
+      dockerfile: Dockerfile
+    image: dosirak/company-service:dev
     container_name: company-service
     profiles: [app]
+    env_file: .env
     ports:
       - "19082:19082"
     depends_on:
@@ -190,9 +239,13 @@ services:
         condition: service_healthy
 
   product-service:
-    image: dosirak/product-service:latest
+    build:
+      context: ../product-service
+      dockerfile: Dockerfile
+    image: dosirak/product-service:dev
     container_name: product-service
     profiles: [app]
+    env_file: .env
     ports:
       - "19083:19083"
     depends_on:
@@ -202,9 +255,13 @@ services:
         condition: service_healthy
 
   cart-service:
-    image: dosirak/cart-service:latest
+    build:
+      context: ../cart-service
+      dockerfile: Dockerfile
+    image: dosirak/cart-service:dev
     container_name: cart-service
     profiles: [app]
+    env_file: .env
     ports:
       - "19084:19084"
     depends_on:
@@ -214,9 +271,13 @@ services:
         condition: service_healthy
 
   order-service:
-    image: dosirak/order-service:latest
+    build:
+      context: ../order-service
+      dockerfile: Dockerfile
+    image: dosirak/order-service:dev
     container_name: order-service
     profiles: [app]
+    env_file: .env
     ports:
       - "19085:19085"
     depends_on:
@@ -226,9 +287,13 @@ services:
         condition: service_healthy
 
   payment-service:
-    image: dosirak/payment-service:latest
+    build:
+      context: ../payment-service
+      dockerfile: Dockerfile
+    image: dosirak/payment-service:dev
     container_name: payment-service
     profiles: [app]
+    env_file: .env
     ports:
       - "19086:19086"
     depends_on:
@@ -238,9 +303,13 @@ services:
         condition: service_healthy
 
   shipment-service:
-    image: dosirak/shipment-service:latest
+    build:
+      context: ../Shipment_server
+      dockerfile: Dockerfile
+    image: dosirak/shipment-service:dev
     container_name: shipment-service
     profiles: [app]
+    env_file: .env
     ports:
       - "19087:19087"
     depends_on:
@@ -250,9 +319,13 @@ services:
         condition: service_healthy
 
   notification-service:
-    image: dosirak/notification-service:latest
+    build:
+      context: ../notification-service
+      dockerfile: Dockerfile
+    image: dosirak/notification-service:dev
     container_name: notification-service
     profiles: [app]
+    env_file: .env
     ports:
       - "19088:19088"
     depends_on:
@@ -262,9 +335,13 @@ services:
         condition: service_healthy
 
   review-service:
-    image: dosirak/review-service:latest
+    build:
+      context: ../review-service
+      dockerfile: Dockerfile
+    image: dosirak/review-service:dev
     container_name: review-service
     profiles: [app]
+    env_file: .env
     ports:
       - "19089:19089"
     depends_on:
@@ -274,9 +351,13 @@ services:
         condition: service_healthy
 
   customer-service:
-    image: dosirak/customer-service:latest
+    build:
+      context: ../customer-service
+      dockerfile: Dockerfile
+    image: dosirak/customer-service:dev
     container_name: customer-service
     profiles: [app]
+    env_file: .env
     ports:
       - "19090:19090"
     depends_on:
@@ -285,7 +366,7 @@ services:
       kafka:
         condition: service_healthy
 
-  # ── Prometheus ────────────────────────────────────────
+  # -- Prometheus --------------------------------------------------
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -295,7 +376,7 @@ services:
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
 
-  # ── Grafana ───────────────────────────────────────────
+  # -- Grafana -----------------------------------------------------
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -307,7 +388,7 @@ services:
     depends_on:
       - prometheus
 
-  # ── Zipkin ────────────────────────────────────────────
+  # -- Zipkin ------------------------------------------------------
   zipkin:
     image: openzipkin/zipkin:latest
     container_name: zipkin
