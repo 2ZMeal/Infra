@@ -30,8 +30,6 @@ spring:
       properties:
         spring.json.add.type.headers: false
   jpa:
-    hibernate:
-      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
