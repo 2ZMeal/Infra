@@ -142,6 +142,8 @@ services:
 
   # -- Config Server (소스에서 빌드) --------------------------------
   config-server:
+    environment:
+      SPRING_PROFILES_ACTIVE: native,local
     build:
       context: ../Config_server
       dockerfile: Dockerfile
