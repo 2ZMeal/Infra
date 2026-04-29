@@ -11,7 +11,7 @@
 #     docker compose -f docker-compose.dev.yml --profile infra --profile platform build --no-cache
 #
 #   전체 종료:
-#     docker compose -f docker-compose.dev.yml --profile infra --profile platform down
+#     docker compose -f docker-compose.dev.yml down
 #
 # 프로필:
 #   infra      -- PostgreSQL, Redis, Kafka, Keycloak (항상 필요)
