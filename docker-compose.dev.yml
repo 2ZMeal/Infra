@@ -8,7 +8,7 @@
 #     docker compose -f docker-compose.dev.yml --profile infra --profile platform up -d --build
 #
 #   platform 이미지 강제 재빌드:
-#     docker compose -f docker-compose.dev.yml --profile platform build --no-cache
+#     docker compose -f docker-compose.dev.yml --profile infra --profile platform build --no-cache
 #
 #   전체 종료:
 #     docker compose -f docker-compose.dev.yml --profile infra --profile platform down
