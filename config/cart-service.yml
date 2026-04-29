@@ -4,13 +4,7 @@ server:
 spring:
   application:
     name: cart-service
-  datasource:
-    url: jdbc:postgresql://postgres:5432/cart_db
-    username: cart_user
-    password: ${CART_DB_PASSWORD:1234}
-    driver-class-name: org.postgresql.Driver
   kafka:
-    bootstrap-servers: kafka:9092
     consumer:
       group-id: cart-group
       auto-offset-reset: earliest

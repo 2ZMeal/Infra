@@ -1,11 +1,8 @@
-# 모든 서비스에 공통으로 적용되는 설정
-eureka:
-  client:
-    service-url:
-      defaultZone: http://eureka-server:8761/eureka
-  instance:
-    prefer-ip-address: true
+###############################
+# 모든 서비스에 공통으로 적용되는 설정 #
+###############################
 
+# MONITORING ---------------------------------------------
 management:
   endpoints:
     web:
@@ -15,13 +12,11 @@ management:
     export:
       prometheus:
         enabled: true
-  zipkin:
-    tracing:
-      endpoint: http://zipkin:9411/api/v2/spans
   tracing:
     sampling:
       probability: 1.0
 
+# SPRING --------------------------------------------------
 spring:
   kafka:
     producer:
@@ -35,6 +30,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: false
 
+# LOGGING --------------------------------------------------
 logging:
   level:
     root: INFO
