@@ -3,6 +3,8 @@
 # 사용법:
 #   infra만 실행 (IntelliJ로 서비스 개발):
 #     docker compose -f docker-compose.dev.yml --profile infra up -d
+#     (config-server 등의 platform도 실행)
+#     docker compose -f docker-compose.dev.yml --profile infra --profile platform up -d
 #
 #   infra + platform 빌드 & 실행 (최초 세팅 및 코드 변경 후):
 #     docker compose -f docker-compose.dev.yml --profile infra --profile platform up -d --build
