@@ -207,6 +207,9 @@ services:
   # -- Domain Services (app profile) --------------------------------
   # 해당 서비스 레포를 ../서비스명 경로에 클론한 뒤 --profile app으로 실행
   user-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      CONFIG_SERVER_URI: http://config-server:8888
     build:
       context: ../user-service
       dockerfile: Dockerfile
