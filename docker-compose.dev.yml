@@ -147,7 +147,7 @@ services:
     build:
       context: ../Config_server
       dockerfile: Dockerfile
-    image: dosirak/config-server:dev
+    image: easymeal/config-server:dev
     container_name: config-server
     profiles: [platform]
     env_file: .env
@@ -169,7 +169,7 @@ services:
     build:
       context: ../Eureka_Server
       dockerfile: Dockerfile
-    image: dosirak/eureka-server:dev
+    image: easymeal/eureka-server:dev
     container_name: eureka-server
     profiles: [platform]
     environment:
@@ -190,7 +190,7 @@ services:
     build:
       context: ../Gateway_server
       dockerfile: Dockerfile
-    image: dosirak/api-gateway:dev
+    image: easymeal/api-gateway:dev
     container_name: api-gateway
     profiles: [platform]
     ports:
@@ -210,7 +210,7 @@ services:
     build:
       context: ../user-service
       dockerfile: Dockerfile
-    image: dosirak/user-service:dev
+    image: easymeal/user-service:dev
     container_name: user-service
     profiles: [app]
     env_file: .env
@@ -226,7 +226,7 @@ services:
     build:
       context: ../company-service
       dockerfile: Dockerfile
-    image: dosirak/company-service:dev
+    image: easymeal/company-service:dev
     container_name: company-service
     profiles: [app]
     env_file: .env
@@ -242,7 +242,7 @@ services:
     build:
       context: ../product-service
       dockerfile: Dockerfile
-    image: dosirak/product-service:dev
+    image: easymeal/product-service:dev
     container_name: product-service
     profiles: [app]
     env_file: .env
@@ -258,7 +258,7 @@ services:
     build:
       context: ../cart-service
       dockerfile: Dockerfile
-    image: dosirak/cart-service:dev
+    image: easymeal/cart-service:dev
     container_name: cart-service
     profiles: [app]
     env_file: .env
@@ -274,7 +274,7 @@ services:
     build:
       context: ../order-service
       dockerfile: Dockerfile
-    image: dosirak/order-service:dev
+    image: easymeal/order-service:dev
     container_name: order-service
     profiles: [app]
     env_file: .env
@@ -290,7 +290,7 @@ services:
     build:
       context: ../payment-service
       dockerfile: Dockerfile
-    image: dosirak/payment-service:dev
+    image: easymeal/payment-service:dev
     container_name: payment-service
     profiles: [app]
     env_file: .env
@@ -306,7 +306,7 @@ services:
     build:
       context: ../Shipment_server
       dockerfile: Dockerfile
-    image: dosirak/shipment-service:dev
+    image: easymeal/shipment-service:dev
     container_name: shipment-service
     profiles: [app]
     env_file: .env
@@ -322,7 +322,7 @@ services:
     build:
       context: ../notification-service
       dockerfile: Dockerfile
-    image: dosirak/notification-service:dev
+    image: easymeal/notification-service:dev
     container_name: notification-service
     profiles: [app]
     env_file: .env
@@ -338,7 +338,7 @@ services:
     build:
       context: ../review-service
       dockerfile: Dockerfile
-    image: dosirak/review-service:dev
+    image: easymeal/review-service:dev
     container_name: review-service
     profiles: [app]
     env_file: .env
@@ -354,7 +354,7 @@ services:
     build:
       context: ../customer-service
       dockerfile: Dockerfile
-    image: dosirak/customer-service:dev
+    image: easymeal/customer-service:dev
     container_name: customer-service
     profiles: [app]
     env_file: .env
