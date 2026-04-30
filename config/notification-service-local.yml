@@ -1,8 +1,32 @@
 spring:
   datasource:
+    driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/notification_db
     username: notification_user
     password: ${NOTIFICATION_DB_PASSWORD:1234}
-    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: localhost:29092  # 외부 리스너 포트 (호스트에서 접근 시)
+
+  mail:
+    username: ${MAIL_USERNAME:}   # 로컬에서 미설정 시 빈 문자열 → 앱 기동 허용
+    password: ${MAIL_PASSWORD:}
+
+# local profile에서는 Eureka 없이 단독 실행 가능
+eureka:
+  client:
+    enabled: false
+
+# [테스트 전용] user-service 없이 이메일 발송 검증 시 사용
+# IntelliJ 환경변수에 TEST_TARGET_EMAIL=your@email.com 설정 후 활용
+notification:
+  test:
+    target-email: ${TEST_TARGET_EMAIL:}

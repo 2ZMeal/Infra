@@ -4,7 +4,30 @@ server:
 spring:
   application:
     name: notification-service
+
   kafka:
     consumer:
       group-id: notification-group
       auto-offset-reset: earliest
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    from: ${MAIL_FROM:noreply@ezmeal.com}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: false   # 모르는 필드 무시
+    serialization:
+      write-dates-as-timestamps: false    # LocalDateTime → ISO-8601 문자열
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
