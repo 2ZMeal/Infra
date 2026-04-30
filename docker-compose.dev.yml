@@ -3,15 +3,17 @@
 # 사용법:
 #   infra만 실행 (IntelliJ로 서비스 개발):
 #     docker compose -f docker-compose.dev.yml --profile infra up -d
+#     (config-server 등의 platform도 실행)
+#     docker compose -f docker-compose.dev.yml --profile infra --profile platform up -d
 #
 #   infra + platform 빌드 & 실행 (최초 세팅 및 코드 변경 후):
 #     docker compose -f docker-compose.dev.yml --profile infra --profile platform up -d --build
 #
 #   platform 이미지 강제 재빌드:
-#     docker compose -f docker-compose.dev.yml --profile platform build --no-cache
+#     docker compose -f docker-compose.dev.yml --profile infra --profile platform build --no-cache
 #
 #   전체 종료:
-#     docker compose -f docker-compose.dev.yml --profile infra --profile platform down
+#     docker compose -f docker-compose.dev.yml down
 #
 # 프로필:
 #   infra      -- PostgreSQL, Redis, Kafka, Keycloak (항상 필요)
@@ -142,10 +144,12 @@ services:
 
   # -- Config Server (소스에서 빌드) --------------------------------
   config-server:
+    environment:
+      SPRING_PROFILES_ACTIVE: native,local
     build:
       context: ../Config_server
       dockerfile: Dockerfile
-    image: dosirak/config-server:dev
+    image: easymeal/config-server:dev
     container_name: config-server
     profiles: [platform]
     env_file: .env
@@ -155,8 +159,6 @@ services:
       - ./config:/config
     depends_on:
       postgres:
-        condition: service_healthy
-      keycloak:
         condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "wget -qO /dev/null http://localhost:8888/actuator/health || exit 1"]
@@ -169,7 +171,7 @@ services:
     build:
       context: ../Eureka_Server
       dockerfile: Dockerfile
-    image: dosirak/eureka-server:dev
+    image: easymeal/eureka-server:dev
     container_name: eureka-server
     profiles: [platform]
     environment:
@@ -190,7 +192,7 @@ services:
     build:
       context: ../Gateway_server
       dockerfile: Dockerfile
-    image: dosirak/api-gateway:dev
+    image: easymeal/api-gateway:dev
     container_name: api-gateway
     profiles: [platform]
     ports:
@@ -207,10 +209,13 @@ services:
   # -- Domain Services (app profile) --------------------------------
   # 해당 서비스 레포를 ../서비스명 경로에 클론한 뒤 --profile app으로 실행
   user-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      CONFIG_SERVER_URI: http://config-server:8888
     build:
       context: ../user-service
       dockerfile: Dockerfile
-    image: dosirak/user-service:dev
+    image: easymeal/user-service:dev
     container_name: user-service
     profiles: [app]
     env_file: .env
@@ -226,7 +231,7 @@ services:
     build:
       context: ../company-service
       dockerfile: Dockerfile
-    image: dosirak/company-service:dev
+    image: easymeal/company-service:dev
     container_name: company-service
     profiles: [app]
     env_file: .env
@@ -242,7 +247,7 @@ services:
     build:
       context: ../product-service
       dockerfile: Dockerfile
-    image: dosirak/product-service:dev
+    image: easymeal/product-service:dev
     container_name: product-service
     profiles: [app]
     env_file: .env
@@ -258,7 +263,7 @@ services:
     build:
       context: ../cart-service
       dockerfile: Dockerfile
-    image: dosirak/cart-service:dev
+    image: easymeal/cart-service:dev
     container_name: cart-service
     profiles: [app]
     env_file: .env
@@ -274,7 +279,7 @@ services:
     build:
       context: ../order-service
       dockerfile: Dockerfile
-    image: dosirak/order-service:dev
+    image: easymeal/order-service:dev
     container_name: order-service
     profiles: [app]
     env_file: .env
@@ -290,7 +295,7 @@ services:
     build:
       context: ../payment-service
       dockerfile: Dockerfile
-    image: dosirak/payment-service:dev
+    image: easymeal/payment-service:dev
     container_name: payment-service
     profiles: [app]
     env_file: .env
@@ -306,7 +311,7 @@ services:
     build:
       context: ../Shipment_server
       dockerfile: Dockerfile
-    image: dosirak/shipment-service:dev
+    image: easymeal/shipment-service:dev
     container_name: shipment-service
     profiles: [app]
     env_file: .env
@@ -322,7 +327,7 @@ services:
     build:
       context: ../notification-service
       dockerfile: Dockerfile
-    image: dosirak/notification-service:dev
+    image: easymeal/notification-service:dev
     container_name: notification-service
     profiles: [app]
     env_file: .env
@@ -338,7 +343,7 @@ services:
     build:
       context: ../review-service
       dockerfile: Dockerfile
-    image: dosirak/review-service:dev
+    image: easymeal/review-service:dev
     container_name: review-service
     profiles: [app]
     env_file: .env
@@ -354,7 +359,7 @@ services:
     build:
       context: ../customer-service
       dockerfile: Dockerfile
-    image: dosirak/customer-service:dev
+    image: easymeal/customer-service:dev
     container_name: customer-service
     profiles: [app]
     env_file: .env
