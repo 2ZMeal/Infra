@@ -175,6 +175,7 @@ services:
     image: easymeal/user-service:latest
     container_name: user-service
     profiles: [app]
+    env_file: .env
     ports:
       - "19081:19081"
     depends_on:
@@ -190,6 +191,7 @@ services:
     image: easymeal/company-service:latest
     container_name: company-service
     profiles: [app]
+    env_file: .env
     ports:
       - "19082:19082"
     depends_on:
@@ -205,6 +207,7 @@ services:
     image: easymeal/product-service:latest
     container_name: product-service
     profiles: [app]
+    env_file: .env
     ports:
       - "19083:19083"
     depends_on:
@@ -220,6 +223,7 @@ services:
     image: easymeal/cart-service:latest
     container_name: cart-service
     profiles: [app]
+    env_file: .env
     ports:
       - "19084:19084"
     depends_on:
@@ -235,6 +239,7 @@ services:
     image: easymeal/order-service:latest
     container_name: order-service
     profiles: [app]
+    env_file: .env
     ports:
       - "19085:19085"
     depends_on:
@@ -250,6 +255,7 @@ services:
     image: easymeal/payment-service:latest
     container_name: payment-service
     profiles: [app]
+    env_file: .env
     ports:
       - "19086:19086"
     depends_on:
@@ -265,6 +271,7 @@ services:
     image: easymeal/shipment-service:latest
     container_name: shipment-service
     profiles: [app]
+    env_file: .env
     ports:
       - "19087:19087"
     depends_on:
@@ -280,6 +287,7 @@ services:
     image: easymeal/notification-service:latest
     container_name: notification-service
     profiles: [app]
+    env_file: .env
     ports:
       - "19088:19088"
     depends_on:
@@ -295,6 +303,7 @@ services:
     image: easymeal/review-service:latest
     container_name: review-service
     profiles: [app]
+    env_file: .env
     ports:
       - "19089:19089"
     depends_on:
@@ -310,6 +319,7 @@ services:
     image: easymeal/customer-service:latest
     container_name: customer-service
     profiles: [app]
+    env_file: .env
     ports:
       - "19090:19090"
     depends_on:
