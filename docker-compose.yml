@@ -170,8 +170,11 @@ services:
       SPRING_PROFILES_ACTIVE: dev
       CONFIG_SERVER_URI: http://config-server:8888
     build:
-      context: ../user-service
+      context: ../User_server
       dockerfile: Dockerfile
+      args:
+        GPR_USER: ${GPR_USER}
+        GPR_TOKEN: ${GPR_TOKEN}
     image: easymeal/user-service:latest
     container_name: user-service
     profiles: [app]
@@ -186,8 +189,11 @@ services:
 
   company-service:
     build:
-      context: ../company-service
+      context: ../Company_server
       dockerfile: Dockerfile
+      args:
+        GPR_USER: ${GPR_USER}
+        GPR_TOKEN: ${GPR_TOKEN}
     image: easymeal/company-service:latest
     container_name: company-service
     profiles: [app]
@@ -202,8 +208,11 @@ services:
 
   product-service:
     build:
-      context: ../product-service
+      context: ../Product_server
       dockerfile: Dockerfile
+      args:
+        GPR_USER: ${GPR_USER}
+        GPR_TOKEN: ${GPR_TOKEN}
     image: easymeal/product-service:latest
     container_name: product-service
     profiles: [app]
@@ -218,8 +227,11 @@ services:
 
   cart-service:
     build:
-      context: ../cart-service
+      context: ../Cart_server
       dockerfile: Dockerfile
+      args:
+        GPR_USER: ${GPR_USER}
+        GPR_TOKEN: ${GPR_TOKEN}
     image: easymeal/cart-service:latest
     container_name: cart-service
     profiles: [app]
@@ -234,8 +246,11 @@ services:
 
   order-service:
     build:
-      context: ../order-service
+      context: ../Order_server
       dockerfile: Dockerfile
+      args:
+        GPR_USER: ${GPR_USER}
+        GPR_TOKEN: ${GPR_TOKEN}
     image: easymeal/order-service:latest
     container_name: order-service
     profiles: [app]
@@ -250,8 +265,11 @@ services:
 
   payment-service:
     build:
-      context: ../payment-service
+      context: ../Payment_server
       dockerfile: Dockerfile
+      args:
+        GPR_USER: ${GPR_USER}
+        GPR_TOKEN: ${GPR_TOKEN}
     image: easymeal/payment-service:latest
     container_name: payment-service
     profiles: [app]
@@ -268,6 +286,9 @@ services:
     build:
       context: ../Shipment_server
       dockerfile: Dockerfile
+      args:
+        GPR_USER: ${GPR_USER}
+        GPR_TOKEN: ${GPR_TOKEN}
     image: easymeal/shipment-service:latest
     container_name: shipment-service
     profiles: [app]
@@ -282,8 +303,11 @@ services:
 
   notification-service:
     build:
-      context: ../notification-service
+      context: ../Notification_server
       dockerfile: Dockerfile
+      args:
+        GPR_USER: ${GPR_USER}
+        GPR_TOKEN: ${GPR_TOKEN}
     image: easymeal/notification-service:latest
     container_name: notification-service
     profiles: [app]
@@ -298,8 +322,11 @@ services:
 
   review-service:
     build:
-      context: ../review-service
+      context: ../Review-server
       dockerfile: Dockerfile
+      args:
+        GPR_USER: ${GPR_USER}
+        GPR_TOKEN: ${GPR_TOKEN}
     image: easymeal/review-service:latest
     container_name: review-service
     profiles: [app]
@@ -314,8 +341,11 @@ services:
 
   customer-service:
     build:
-      context: ../customer-service
+      context: ../Customer_server
       dockerfile: Dockerfile
+      args:
+        GPR_USER: ${GPR_USER}
+        GPR_TOKEN: ${GPR_TOKEN}
     image: easymeal/customer-service:latest
     container_name: customer-service
     profiles: [app]
