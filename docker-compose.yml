@@ -166,6 +166,9 @@ services:
 
   # ── Domain Services (app profile) ────────────────────
   user-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      CONFIG_SERVER_URI: http://config-server:8888
     build:
       context: ../user-service
       dockerfile: Dockerfile
