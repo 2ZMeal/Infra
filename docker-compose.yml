@@ -331,7 +331,7 @@ services:
 
   review-service:
     build:
-      context: ../Review-server
+      context: ../Review_server
       dockerfile: Dockerfile
       args:
         GPR_USER: ${GPR_USER}
