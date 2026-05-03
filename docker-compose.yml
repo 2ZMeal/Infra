@@ -310,24 +310,24 @@ services:
 #      kafka:
 #        condition: service_healthy
 
-#  notification-service:
-#    build:
-#      context: ../Notification_server
-#      dockerfile: Dockerfile
-#      args:
-#        GPR_USER: ${GPR_USER}
-#        GPR_TOKEN: ${GPR_TOKEN}
-#    image: easymeal/notification-service:latest
-#    container_name: notification-service
-#    profiles: [app]
-#    env_file: .env
-#    ports:
-#      - "19088:19088"
-#    depends_on:
-#      eureka-server:
-#        condition: service_healthy
-#      kafka:
-#        condition: service_healthy
+  notification-service:
+    build:
+      context: ../Notification_server
+      dockerfile: Dockerfile
+      args:
+        GPR_USER: ${GPR_USER}
+        GPR_TOKEN: ${GPR_TOKEN}
+    image: easymeal/notification-service:latest
+    container_name: notification-service
+    profiles: [app]
+    env_file: .env
+    ports:
+      - "19088:19088"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
 
   review-service:
     build:
