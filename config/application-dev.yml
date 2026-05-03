@@ -15,7 +15,7 @@ spring:
   jpa:
     hibernate:
       # 운영 안정성 등을 고려하여 배포 또는 테스트환경에서 DB가 변경되지 않고 검증만 하도록 합니다.
-      ddl-auto: validate
+      ddl-auto: update
 
 # MONITORING -----------------------------------------------
 management:
