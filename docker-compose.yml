@@ -291,24 +291,24 @@ services:
       kafka:
         condition: service_healthy
 
-  shipment-service:
-    build:
-      context: ../Shipment_server
-      dockerfile: Dockerfile
-      args:
-        GPR_USER: ${GPR_USER}
-        GPR_TOKEN: ${GPR_TOKEN}
-    image: easymeal/shipment-service:latest
-    container_name: shipment-service
-    profiles: [app]
-    env_file: .env
-    ports:
-      - "19087:19087"
-    depends_on:
-      eureka-server:
-        condition: service_healthy
-      kafka:
-        condition: service_healthy
+#  shipment-service:
+#    build:
+#      context: ../Shipment_server
+#      dockerfile: Dockerfile
+#      args:
+#        GPR_USER: ${GPR_USER}
+#        GPR_TOKEN: ${GPR_TOKEN}
+#    image: easymeal/shipment-service:latest
+#    container_name: shipment-service
+#    profiles: [app]
+#    env_file: .env
+#    ports:
+#      - "19087:19087"
+#    depends_on:
+#      eureka-server:
+#        condition: service_healthy
+#      kafka:
+#        condition: service_healthy
 
   notification-service:
     build:
