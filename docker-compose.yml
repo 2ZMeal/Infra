@@ -166,7 +166,10 @@ services:
 
   # ── Domain Services (app profile) ────────────────────
   user-service:
-    image: dosirak/user-service:latest
+    build:
+      context: ../user-service
+      dockerfile: Dockerfile
+    image: easymeal/user-service:latest
     container_name: user-service
     profiles: [app]
     ports:
@@ -178,7 +181,10 @@ services:
         condition: service_healthy
 
   company-service:
-    image: dosirak/company-service:latest
+    build:
+      context: ../company-service
+      dockerfile: Dockerfile
+    image: easymeal/company-service:latest
     container_name: company-service
     profiles: [app]
     ports:
@@ -190,7 +196,10 @@ services:
         condition: service_healthy
 
   product-service:
-    image: dosirak/product-service:latest
+    build:
+      context: ../product-service
+      dockerfile: Dockerfile
+    image: easymeal/product-service:latest
     container_name: product-service
     profiles: [app]
     ports:
@@ -202,7 +211,10 @@ services:
         condition: service_healthy
 
   cart-service:
-    image: dosirak/cart-service:latest
+    build:
+      context: ../cart-service
+      dockerfile: Dockerfile
+    image: easymeal/cart-service:latest
     container_name: cart-service
     profiles: [app]
     ports:
@@ -214,7 +226,10 @@ services:
         condition: service_healthy
 
   order-service:
-    image: dosirak/order-service:latest
+    build:
+      context: ../order-service
+      dockerfile: Dockerfile
+    image: easymeal/order-service:latest
     container_name: order-service
     profiles: [app]
     ports:
@@ -226,7 +241,10 @@ services:
         condition: service_healthy
 
   payment-service:
-    image: dosirak/payment-service:latest
+    build:
+      context: ../payment-service
+      dockerfile: Dockerfile
+    image: easymeal/payment-service:latest
     container_name: payment-service
     profiles: [app]
     ports:
@@ -238,7 +256,10 @@ services:
         condition: service_healthy
 
   shipment-service:
-    image: dosirak/shipment-service:latest
+    build:
+      context: ../Shipment_server
+      dockerfile: Dockerfile
+    image: easymeal/shipment-service:latest
     container_name: shipment-service
     profiles: [app]
     ports:
@@ -250,7 +271,10 @@ services:
         condition: service_healthy
 
   notification-service:
-    image: dosirak/notification-service:latest
+    build:
+      context: ../notification-service
+      dockerfile: Dockerfile
+    image: easymeal/notification-service:latest
     container_name: notification-service
     profiles: [app]
     ports:
@@ -262,7 +286,10 @@ services:
         condition: service_healthy
 
   review-service:
-    image: dosirak/review-service:latest
+    build:
+      context: ../review-service
+      dockerfile: Dockerfile
+    image: easymeal/review-service:latest
     container_name: review-service
     profiles: [app]
     ports:
@@ -274,7 +301,10 @@ services:
         condition: service_healthy
 
   customer-service:
-    image: dosirak/customer-service:latest
+    build:
+      context: ../customer-service
+      dockerfile: Dockerfile
+    image: easymeal/customer-service:latest
     container_name: customer-service
     profiles: [app]
     ports:
