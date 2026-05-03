@@ -135,6 +135,9 @@ services:
 
   # ── Eureka Server ─────────────────────────────────────
   eureka-server:
+    build:
+      context: ../Eureka_Server
+      dockerfile: Dockerfile
     image: easymeal/eureka-server:latest
     container_name: eureka-server
     profiles: [platform]
@@ -153,6 +156,9 @@ services:
 
   # ── API Gateway ───────────────────────────────────────
   api-gateway:
+    build:
+      context: ../Gateway_server
+      dockerfile: Dockerfile
     image: easymeal/api-gateway:latest
     container_name: api-gateway
     profiles: [platform]
