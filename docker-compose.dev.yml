@@ -341,7 +341,7 @@ services:
 
   review-service:
     build:
-      context: ../review-service
+      context: ../Review_server
       dockerfile: Dockerfile
     image: easymeal/review-service:dev
     container_name: review-service

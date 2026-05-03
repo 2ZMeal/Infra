@@ -234,24 +234,24 @@ services:
       kafka:
         condition: service_healthy
 
-  cart-service:
-    build:
-      context: ../Cart_server
-      dockerfile: Dockerfile
-      args:
-        GPR_USER: ${GPR_USER}
-        GPR_TOKEN: ${GPR_TOKEN}
-    image: easymeal/cart-service:latest
-    container_name: cart-service
-    profiles: [app]
-    env_file: .env
-    ports:
-      - "19084:19084"
-    depends_on:
-      eureka-server:
-        condition: service_healthy
-      kafka:
-        condition: service_healthy
+#  cart-service:
+#    build:
+#      context: ../Cart_server
+#      dockerfile: Dockerfile
+#      args:
+#        GPR_USER: ${GPR_USER}
+#        GPR_TOKEN: ${GPR_TOKEN}
+#    image: easymeal/cart-service:latest
+#    container_name: cart-service
+#    profiles: [app]
+#    env_file: .env
+#    ports:
+#      - "19084:19084"
+#    depends_on:
+#      eureka-server:
+#        condition: service_healthy
+#      kafka:
+#        condition: service_healthy
 
   order-service:
     build:
