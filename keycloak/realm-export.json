@@ -512,7 +512,8 @@
         "realm-management": [
           "manage-users",
           "query-users",
-          "view-users"
+          "view-users",
+          "view-realm"
         ],
         "easymeal-admin": [
           "uma_protection"
