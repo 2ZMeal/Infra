@@ -125,6 +125,8 @@ services:
 
   # ── Config Server ────────────────────────────────────
   config-server:
+    environment:
+      SPRING_PROFILES_ACTIVE: native,dev
     build:
       context: ../Config_server
       dockerfile: Dockerfile
