@@ -5,4 +5,4 @@ spring:
     password: ${SHIPMENT_DB_PASSWORD:1234}
     driver-class-name: org.postgresql.Driver
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: localhost:29092
