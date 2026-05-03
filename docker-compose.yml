@@ -111,7 +111,10 @@ services:
 
   # ── Config Server ────────────────────────────────────
   config-server:
-    image: dosirak/config-server:latest
+    build:
+      context: ../Config_server
+      dockerfile: Dockerfile
+    image: easymeal/config-server:latest
     container_name: config-server
     profiles: [platform]
     env_file: .env
@@ -132,7 +135,7 @@ services:
 
   # ── Eureka Server ─────────────────────────────────────
   eureka-server:
-    image: dosirak/eureka-server:latest
+    image: easymeal/eureka-server:latest
     container_name: eureka-server
     profiles: [platform]
     environment:
@@ -150,7 +153,7 @@ services:
 
   # ── API Gateway ───────────────────────────────────────
   api-gateway:
-    image: dosirak/api-gateway:latest
+    image: easymeal/api-gateway:latest
     container_name: api-gateway
     profiles: [platform]
     ports:
