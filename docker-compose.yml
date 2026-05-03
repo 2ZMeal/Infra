@@ -213,6 +213,9 @@ services:
         condition: service_healthy
 
   company-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      CONFIG_SERVER_URI: http://config-server:8888
     build:
       context: ../Company_server
       dockerfile: Dockerfile
@@ -232,6 +235,9 @@ services:
         condition: service_healthy
 
   product-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      CONFIG_SERVER_URI: http://config-server:8888
     build:
       context: ../Product_server
       dockerfile: Dockerfile
@@ -270,6 +276,9 @@ services:
 #        condition: service_healthy
 
   order-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      CONFIG_SERVER_URI: http://config-server:8888
     build:
       context: ../Order_server
       dockerfile: Dockerfile
@@ -289,6 +298,9 @@ services:
         condition: service_healthy
 
   payment-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      CONFIG_SERVER_URI: http://config-server:8888
     build:
       context: ../Payment_server
       dockerfile: Dockerfile
@@ -308,6 +320,9 @@ services:
         condition: service_healthy
 
   shipment-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      CONFIG_SERVER_URI: http://config-server:8888
     build:
       context: ../Shipment_server
       dockerfile: Dockerfile
@@ -327,6 +342,9 @@ services:
         condition: service_healthy
 
   notification-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      CONFIG_SERVER_URI: http://config-server:8888
     build:
       context: ../Notification_server
       dockerfile: Dockerfile
@@ -346,6 +364,9 @@ services:
         condition: service_healthy
 
   review-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      CONFIG_SERVER_URI: http://config-server:8888
     build:
       context: ../Review_server
       dockerfile: Dockerfile
@@ -365,6 +386,9 @@ services:
         condition: service_healthy
 
   customer-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      CONFIG_SERVER_URI: http://config-server:8888
     build:
       context: ../Customer_server
       dockerfile: Dockerfile
