@@ -8,3 +8,5 @@ spring:
     consumer:
       group-id: product-group
       auto-offset-reset: earliest
+  elasticsearch:
+    uris: ${PRODUCT_ELASTICSEARCH_URIS:http://localhost:9200}
