@@ -123,6 +123,38 @@ services:
       timeout: 10s
       retries: 10
 
+  # -- Elasticsearch -----------------------------------------------
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.3
+    container_name: elasticsearch
+    profiles: [infra]
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "false"
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs http://localhost:9200/_cluster/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+
+  # -- Kibana ------------------------------------------------------
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.15.3
+    container_name: kibana
+    profiles: [infra]
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
   # ── Config Server ────────────────────────────────────
   config-server:
     environment:
@@ -238,6 +270,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: dev
       CONFIG_SERVER_URI: http://config-server:8888
+      PRODUCT_ELASTICSEARCH_URIS: http://elasticsearch:9200
     build:
       context: ../Product_server
       dockerfile: Dockerfile
@@ -246,7 +279,7 @@ services:
         GPR_TOKEN: ${GPR_TOKEN}
     image: easymeal/product-service:latest
     container_name: product-service
-    profiles: [app]
+    profiles: [ app ]
     env_file: .env
     ports:
       - "19083:19083"
@@ -254,6 +287,8 @@ services:
       eureka-server:
         condition: service_healthy
       kafka:
+        condition: service_healthy
+      elasticsearch:
         condition: service_healthy
 
 #  cart-service:
@@ -439,3 +474,4 @@ services:
 
 volumes:
   postgres_data:
+  elasticsearch_data:
