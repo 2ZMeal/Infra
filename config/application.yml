@@ -12,9 +12,6 @@ management:
     export:
       prometheus:
         enabled: true
-  tracing:
-    sampling:
-      probability: 1.0
 
 # SPRING --------------------------------------------------
 spring:
@@ -39,3 +36,5 @@ logging:
   level:
     root: INFO
     com.ezmeal: DEBUG
+  pattern:
+    level: "%5p [${spring.application.name:}, traceId=%X{traceId:-}, spanId=%X{spanId:-}]"
