@@ -19,6 +19,9 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - monitoring-net
+
 
   # ── Redis ───────────────────────────────────────────
   redis:
@@ -32,6 +35,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - monitoring-net
 
   # ── Zookeeper ───────────────────────────────────────
   zookeeper:
@@ -48,6 +53,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - monitoring-net
 
   # ── Kafka ────────────────────────────────────────────
   kafka:
@@ -70,6 +77,8 @@ services:
       interval: 15s
       timeout: 10s
       retries: 5
+    networks:
+      - monitoring-net
 
   # -- Kafka UI ----------------------------------------------------
   kafka-ui:
@@ -84,6 +93,8 @@ services:
     environment:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+    networks:
+      - monitoring-net
 
   # ── Kafdrop (Kafka UI) ───────────────────────────────
   kafdrop:
@@ -97,6 +108,8 @@ services:
       - "9000:9000"
     environment:
       KAFKA_BROKERCONNECT: kafka:9092
+    networks:
+      - monitoring-net
 
   # ── Keycloak ─────────────────────────────────────────
   keycloak:
@@ -122,6 +135,8 @@ services:
       interval: 15s
       timeout: 10s
       retries: 10
+    networks:
+      - monitoring-net
 
   # -- Elasticsearch -----------------------------------------------
   elasticsearch:
@@ -141,6 +156,8 @@ services:
       interval: 15s
       timeout: 10s
       retries: 10
+    networks:
+      - monitoring-net
 
   # -- Kibana ------------------------------------------------------
   kibana:
@@ -154,6 +171,8 @@ services:
     depends_on:
       elasticsearch:
         condition: service_healthy
+    networks:
+      - monitoring-net
 
   # ── Config Server ────────────────────────────────────
   config-server:
@@ -178,6 +197,8 @@ services:
       interval: 15s
       timeout: 10s
       retries: 5
+    networks:
+      - monitoring-net
 
   # ── Eureka Server ─────────────────────────────────────
   eureka-server:
@@ -199,6 +220,8 @@ services:
       interval: 15s
       timeout: 10s
       retries: 5
+    networks:
+      - monitoring-net
 
   # ── API Gateway ───────────────────────────────────────
   api-gateway:
@@ -218,6 +241,8 @@ services:
       interval: 15s
       timeout: 10s
       retries: 5
+    networks:
+      - monitoring-net
 
   # ── Domain Services (app profile) ────────────────────
   user-service:
@@ -241,6 +266,8 @@ services:
         condition: service_healthy
       kafka:
         condition: service_healthy
+    networks:
+      - monitoring-net
 
   company-service:
     environment:
@@ -263,6 +290,8 @@ services:
         condition: service_healthy
       kafka:
         condition: service_healthy
+    networks:
+      - monitoring-net
 
   product-service:
     environment:
@@ -288,6 +317,8 @@ services:
         condition: service_healthy
       elasticsearch:
         condition: service_healthy
+    networks:
+      - monitoring-net
 
 #  cart-service:
 #    build:
@@ -329,6 +360,8 @@ services:
         condition: service_healthy
       kafka:
         condition: service_healthy
+    networks:
+      - monitoring-net
 
   payment-service:
     environment:
@@ -351,6 +384,8 @@ services:
         condition: service_healthy
       kafka:
         condition: service_healthy
+    networks:
+      - monitoring-net
 
   shipment-service:
     environment:
@@ -373,6 +408,8 @@ services:
         condition: service_healthy
       kafka:
         condition: service_healthy
+    networks:
+      - monitoring-net
 
   notification-service:
     environment:
@@ -395,6 +432,8 @@ services:
         condition: service_healthy
       kafka:
         condition: service_healthy
+    networks:
+      - monitoring-net
 
   review-service:
     environment:
@@ -417,6 +456,8 @@ services:
         condition: service_healthy
       kafka:
         condition: service_healthy
+    networks:
+      - monitoring-net
 
   customer-service:
     environment:
@@ -439,6 +480,8 @@ services:
         condition: service_healthy
       kafka:
         condition: service_healthy
+    networks:
+      - monitoring-net
 
   # ── Prometheus ────────────────────────────────────────
   prometheus:
@@ -449,6 +492,8 @@ services:
       - "9090:9090"
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - monitoring-net
 
   # ── Grafana ───────────────────────────────────────────
   grafana:
@@ -461,6 +506,8 @@ services:
       GF_SECURITY_ADMIN_PASSWORD: admin
     depends_on:
       - prometheus
+    networks:
+      - monitoring-net
 
   # ── Zipkin ────────────────────────────────────────────
   zipkin:
@@ -469,7 +516,13 @@ services:
     profiles: [monitoring]
     ports:
       - "9411:9411"
+    networks:
+      - monitoring-net
 
 volumes:
   postgres_data:
   elasticsearch_data:
+
+networks:
+  monitoring-net:
+    driver: bridge
