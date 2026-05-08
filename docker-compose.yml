@@ -20,7 +20,7 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - monitoring-net
+      - ezmeal-net
 
 
   # ── Redis ───────────────────────────────────────────
@@ -36,7 +36,7 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - monitoring-net
+      - ezmeal-net
 
   # ── Zookeeper ───────────────────────────────────────
   zookeeper:
@@ -54,7 +54,7 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - monitoring-net
+      - ezmeal-net
 
   # ── Kafka ────────────────────────────────────────────
   kafka:
@@ -78,7 +78,7 @@ services:
       timeout: 10s
       retries: 5
     networks:
-      - monitoring-net
+      - ezmeal-net
 
   # -- Kafka UI ----------------------------------------------------
   kafka-ui:
@@ -94,7 +94,7 @@ services:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
     networks:
-      - monitoring-net
+      - ezmeal-net
 
   # ── Kafdrop (Kafka UI) ───────────────────────────────
   kafdrop:
@@ -109,7 +109,7 @@ services:
     environment:
       KAFKA_BROKERCONNECT: kafka:9092
     networks:
-      - monitoring-net
+      - ezmeal-net
 
   # ── Keycloak ─────────────────────────────────────────
   keycloak:
@@ -136,7 +136,7 @@ services:
       timeout: 10s
       retries: 10
     networks:
-      - monitoring-net
+      - ezmeal-net
 
   # -- Elasticsearch -----------------------------------------------
   elasticsearch:
@@ -157,7 +157,7 @@ services:
       timeout: 10s
       retries: 10
     networks:
-      - monitoring-net
+      - ezmeal-net
 
   # -- Kibana ------------------------------------------------------
   kibana:
@@ -172,7 +172,7 @@ services:
       elasticsearch:
         condition: service_healthy
     networks:
-      - monitoring-net
+      - ezmeal-net
 
   # ── Config Server ────────────────────────────────────
   config-server:
@@ -198,7 +198,7 @@ services:
       timeout: 10s
       retries: 5
     networks:
-      - monitoring-net
+      - ezmeal-net
 
   # ── Eureka Server ─────────────────────────────────────
   eureka-server:
@@ -221,7 +221,7 @@ services:
       timeout: 10s
       retries: 5
     networks:
-      - monitoring-net
+      - ezmeal-net
 
   # ── API Gateway ───────────────────────────────────────
   api-gateway:
@@ -242,7 +242,7 @@ services:
       timeout: 10s
       retries: 5
     networks:
-      - monitoring-net
+      - ezmeal-net
 
   # ── Domain Services (app profile) ────────────────────
   user-service:
@@ -267,7 +267,7 @@ services:
       kafka:
         condition: service_healthy
     networks:
-      - monitoring-net
+      - ezmeal-net
 
   company-service:
     environment:
@@ -291,7 +291,7 @@ services:
       kafka:
         condition: service_healthy
     networks:
-      - monitoring-net
+      - ezmeal-net
 
   product-service:
     environment:
@@ -318,7 +318,7 @@ services:
       elasticsearch:
         condition: service_healthy
     networks:
-      - monitoring-net
+      - ezmeal-net
 
 #  cart-service:
 #    build:
@@ -361,7 +361,7 @@ services:
       kafka:
         condition: service_healthy
     networks:
-      - monitoring-net
+      - ezmeal-net
 
   payment-service:
     environment:
@@ -385,7 +385,7 @@ services:
       kafka:
         condition: service_healthy
     networks:
-      - monitoring-net
+      - ezmeal-net
 
   shipment-service:
     environment:
@@ -409,7 +409,7 @@ services:
       kafka:
         condition: service_healthy
     networks:
-      - monitoring-net
+      - ezmeal-net
 
   notification-service:
     environment:
@@ -433,7 +433,7 @@ services:
       kafka:
         condition: service_healthy
     networks:
-      - monitoring-net
+      - ezmeal-net
 
   review-service:
     environment:
@@ -457,7 +457,7 @@ services:
       kafka:
         condition: service_healthy
     networks:
-      - monitoring-net
+      - ezmeal-net
 
   customer-service:
     environment:
@@ -481,7 +481,7 @@ services:
       kafka:
         condition: service_healthy
     networks:
-      - monitoring-net
+      - ezmeal-net
 
   # ── Prometheus ────────────────────────────────────────
   prometheus:
@@ -493,7 +493,7 @@ services:
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
-      - monitoring-net
+      - ezmeal-net
 
   # ── Grafana ───────────────────────────────────────────
   grafana:
@@ -507,7 +507,7 @@ services:
     depends_on:
       - prometheus
     networks:
-      - monitoring-net
+      - ezmeal-net
 
   # ── Zipkin ────────────────────────────────────────────
   zipkin:
@@ -517,12 +517,12 @@ services:
     ports:
       - "9411:9411"
     networks:
-      - monitoring-net
+      - ezmeal-net
 
 volumes:
   postgres_data:
   elasticsearch_data:
 
 networks:
-  monitoring-net:
+  ezmeal-net:
     driver: bridge
