@@ -24,12 +24,11 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: "health,info,prometheus"
 
-  # 로컬 개발 시 디버깅을 위해 헬스 체크 상세 정보를 항상 노출
   endpoint:
     health:
-      show-details: always
+      show-details: when_authorized
 
   tracing:
     sampling:
