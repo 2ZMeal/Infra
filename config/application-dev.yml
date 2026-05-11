@@ -31,7 +31,8 @@ management:
 
   tracing:
     sampling:
-      probability: 0.1 # 운영 환경에서는 트래픽이 많을 수 있으므로 0.1, 0.05등으로 낮추는 것을 검토할 것
-    export:
-      zipkin:
-        endpoint: http://zipkin:9411/api/v2/spans
+      probability: 1.0 # 운영 환경에서는 트래픽이 많을 수 있으므로 0.1, 0.05등으로 낮추는 것을 검토할 것
+
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411/api/v2/spans
