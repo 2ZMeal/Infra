@@ -20,7 +20,6 @@ spring:
 
 # MONITORING -----------------------------------------------
 management:
-  # application.yml의 'health, info, prometheus' 설정을 덮어쓰고 모든 엔드포인트 개방
   endpoints:
     web:
       exposure:
