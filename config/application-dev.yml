@@ -6,6 +6,7 @@
 eureka:
   instance:
     prefer-ip-address: true
+
   client:
     service-url:
       defaultZone: http://eureka-server:8761/eureka
@@ -19,6 +20,15 @@ spring:
 
 # MONITORING -----------------------------------------------
 management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,prometheus"
+
+  endpoint:
+    health:
+      show-details: when_authorized
+
   tracing:
     sampling:
       probability: 0.1 # 운영 환경에서는 트래픽이 많을 수 있으므로 0.1, 0.05등으로 낮추는 것을 검토할 것

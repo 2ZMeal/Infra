@@ -1,0 +1,29 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'spring-services-dev'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets:
+          # IntelliJ(로컬 호스트)에서 직접 실행하는 10개 도메인 서비스
+          - host.docker.internal:19081
+          - host.docker.internal:19082
+          - host.docker.internal:19083
+          - host.docker.internal:19084
+          - host.docker.internal:19085
+          - host.docker.internal:19086
+          - host.docker.internal:19087
+          - host.docker.internal:19088
+          - host.docker.internal:19089
+          - host.docker.internal:19090
+
+          # Docker 내부(--profile platform)에서 실행 중인 공통 플랫폼 서버
+          - config-server:8888
+          - eureka-server:8761
+          - api-gateway:8080
+
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
