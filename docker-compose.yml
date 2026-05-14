@@ -516,6 +516,10 @@ services:
     profiles: [monitoring]
     ports:
       - "9411:9411"
+    environment:
+      - JAVA_OPTS=-Xms512m -Xmx1024m -XX:+ExitOnOutOfMemoryError
+    mem_limit: 1536m
+    restart: unless-stopped
     networks:
       - ezmeal-net
 
