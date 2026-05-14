@@ -29,6 +29,11 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: false
 
+  datasource:
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
+
 # LOGGING --------------------------------------------------
 logging:
   level:
